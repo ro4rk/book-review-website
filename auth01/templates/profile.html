@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: #ff6f61;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar a {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            text-decoration: none;
+            margin-right: 30px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #ffe066;
+        }
+
+        /* Main Container */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Profile Section */
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-picture {
+            width: 150px;
+        }
+
+        .profile-picture img {
+            width: 100%;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-details h2 {
+            font-size: 2em;
+            color: #264653;
+            margin: 0;
+        }
+
+        .profile-details p {
+            font-size: 1.2em;
+            margin: 5px 0;
+            color: #666;
+        }
+
+        /* Bookshelf Section */
+        .bookshelf {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        .bookshelf h3 {
+            color: #264653;
+            margin-bottom: 10px;
+        }
+
+        .bookshelf a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #e76f51;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .bookshelf a:hover {
+            background-color: #f4a261;
+        }
+
+        /* Recent Updates Section */
+        .recent-updates {
+            margin-top: 20px;
+        }
+
+        .update-item {
+            display: flex;
+            align-items: center;
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-cover {
+            width: 50px;
+            margin-right: 15px;
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .book-info {
+            flex-grow: 1;
+        }
+
+        .dropdown-btn {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-btn button {
+            background-color: #e76f51;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-btn button:hover {
+            background-color: #f4a261;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px 15px;
+            color: #264653;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown-btn:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="{% url 'home' %}">Home</a>
+       
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Profile Section -->
+        <div class="profile">
+            <div class="profile-picture">
+                <img src="china.jpg" alt="Profile Picture">
+            </div>
+            <div class="profile-details">
+                <h2>John Doe</h2> <!-- Replace with the logged-in user's name -->
+                <p>Email: johndoe@example.com</p> <!-- Replace with the user's email -->
+                <p>Joined: November 2024</p> <!-- Replace with the user's join date -->
+            </div>
+        </div>
+
+        <!-- User's Bookshelf -->
+        <div class="bookshelf">
+            <h3>Your Bookshelf</h3>
+            <a href="#">Read (0)</a>
+            <a href="#">Currently Reading (0)</a>
+            <a href="{% url 'tbr' %}">Want to Read (0)</a>
+        </div>
+
+        <!-- Recent Updates -->
+        <div class="recent-updates">
+            <h3>Recent Updates</h3>
+            <div class="update-item">
+                <div class="book-cover">
+                    <img src="book-cover.jpg" alt="Book Cover">
+                </div>
+                <div class="book-info">
+                    <p><strong>Persuasion by Jane Austen</strong></p>
+                    <p><em>Finished reading 0 minutes ago</em></p>
+                </div>
+                <div class="dropdown-btn">
+                    <button>Want to Read</button>
+                    <div class="dropdown-content">
+                        <a href="#">Currently Reading</a>
+                        <a href="#">Read</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

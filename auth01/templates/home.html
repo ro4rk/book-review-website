@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookstore</title>
+    <style>
+        /* Your existing CSS goes here */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .navbar {
+            background-color: #ff6f61;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar a {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            text-decoration: none;
+            margin-right: 30px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #ffe066;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-right: 30px;
+        }
+
+        .dropdown button {
+            background-color: #ff6f61;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown button:hover {
+            background-color: #e76f51;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Link styling for "Find Books" */
+        .find-books-link {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .find-books-link:hover {
+            color: #ffe066;
+        }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .book-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .book-details {
+            width: 70%;
+        }
+
+        .book-image {
+            width: 25%;
+            text-align: center;
+        }
+
+        .book-image img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-name {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #2a9d8f;
+            text-decoration: none;
+        }
+
+        .author-name {
+            font-size: 1.1em;
+            color: #264653;
+            margin-top: 5px;
+        }
+
+        .description {
+            font-size: 1em;
+            margin-top: 15px;
+            color: #6c757d;
+            line-height: 1.7em;
+        }
+
+        .rating {
+            color: #ffcb74;
+            font-size: 1.1em;
+            margin-left: 10px;
+        }
+
+        .book-section:hover {
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #264653;
+            color: white;
+            margin-top: auto;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 1em;
+        }
+
+        .footer a {
+            color: #ffcb74;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-content">
+        <div class="navbar">
+            <div>
+                <a href="{% url 'logout' %}">Log out</a>
+                <a href="{% url 'profile' %}">Profile</a>
+            </div>
+            <div class="navbar-right">
+                <div class="dropdown">
+                    <button>Genres</button>
+                    <div class="dropdown-content">
+                        <a href="{% url 'genre_search' 'Fiction' %}">Fiction</a>
+                        <a href="{% url 'genre_search' 'Non-fiction' %}">Non-fiction</a>
+                        <a href="{% url 'genre_search' 'Sci-Fi' %}">Sci-Fi</a>
+                        <a href="{% url 'genre_search' 'Fantasy' %}">Fantasy</a>
+                        <a href="{% url 'genre_search' 'Mystery' %}">Mystery</a>
+                        <a href="{% url 'genre_search' %}">Browse All Genres</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <button>Hot Tags</button>
+                    <div class="dropdown-content">
+                        <a href="#">Fiction</a>
+                        <a href="#">Non-fiction</a>
+                        <a href="#">Sci-Fi</a>
+                        <a href="#">Fantasy</a>
+                        <a href="#">Mystery</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <button>Favorite Authors</button>
+                    <div class="dropdown-content">
+                        <a href="#">F. Scott Fitzgerald</a>
+                        <a href="#">George Orwell</a>
+                        <a href="#">Jane Austen</a>
+                        <a href="#">Agatha Christie</a>
+                    </div>
+                </div>
+
+                <!-- "Find Books" link replacing the search bar -->
+                <a href="{% url 'search' %}" class="find-books-link">Find Books</a>
+            </div>
+        </div>
+
+        <!-- Container for search results and existing book grid -->
+        <div class="container">
+            <div id="results" class="book-grid"></div>
+
+            <!-- Existing hardcoded book listings -->
+            <div class="book-grid">
+                <div class="book-section">
+                    <div class="book-details">
+                        <a href="the_great_gatsby.html" class="book-name">The Great Gatsby</a>
+                        <p class="author-name">by F. Scott Fitzgerald</p>
+                        <p class="description">A novel of the Jazz Age, "The Great Gatsby" tells the story of the enigmatic Jay Gatsby and his obsession with the beautiful Daisy Buchanan.</p>
+                        <span class="rating">⭐ 4.5</span>
+                    </div>
+                    <div class="book-image">
+                        <img src="https://m.media-amazon.com/images/I/71XK9H0rJ4L.AC_UL320.jpg" alt="The Great Gatsby">
+                    </div>
+                </div>
+
+                <div class="book-section">
+                    <div class="book-details">
+                        <a href="#" class="book-name">1984</a>
+                        <p class="author-name">by George Orwell</p>
+                        <p class="description">A dystopian novel that explores a terrifying future of perpetual surveillance and mind control by a totalitarian regime.</p>
+                        <span class="rating">⭐ 4.6</span>
+                    </div>
+                    <div class="book-image">
+                        <img src="https://m.media-amazon.com/images/I/71kxa1-0mfL._AC_UL320_.jpg" alt="1984">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Bookstore | Designed by [Your Name]</p>
+    </div>
+
+</body>
+

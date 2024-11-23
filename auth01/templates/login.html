@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Bookstore</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('/static/auth0/img2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 0;
+        }
+
+        .signin-container {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .signin-container h1 {
+            color: #ff6f61;
+            margin-bottom: 20px;
+        }
+
+        .signin-container input[type="text"],
+        .signin-container input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        .signin-container button {
+            background-color: #ff6f61;
+            color: white;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .signin-container button:hover {
+            background-color: #e76f51;
+        }
+
+        .signin-container p {
+            margin-top: 20px;
+        }
+
+        .signin-container p a {
+            color: #ff6f61;
+            text-decoration: none;
+        }
+
+        .signin-container p a:hover {
+            text-decoration: underline;
+        }
+
+        /* Pop-up message styling */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ff6f61;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            z-index: 10;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <div class="signin-container">
+        <h1>Sign In to Your Account</h1>
+
+        <form id="loginForm">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Enter your Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Sign In</button>
+        </form>
+
+        <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+    </div>
+
+    <div class="popup" id="popupMessage"></div>
+
+    <script>
+        // Handle form submission with AJAX
+        document.getElementById('loginForm').onsubmit = async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const response = await fetch("{% url 'login' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            const data = await response.json();
+            if (response.status === 200 && data.redirect_url) {
+                window.location.href = data.redirect_url;
+            } else if (data.error) {
+                showPopup(data.error);
+            }
+        };
+
+        // Show pop-up message function
+        function showPopup(message) {
+            const popup = document.getElementById('popupMessage');
+            popup.innerText = message;
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3000); // Hide after 3 seconds
+        }
+    </script>
+
+</body>
+</html>

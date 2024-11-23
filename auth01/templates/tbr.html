@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your TBR List</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #ff6f61;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar a {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            text-decoration: none;
+            margin-right: 30px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #ffe066;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .bookshelf h3 {
+            color: #264653;
+            margin-bottom: 10px;
+        }
+
+        .book-item {
+            display: flex;
+            align-items: center;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            justify-content: space-between;
+        }
+
+        .book-cover {
+            width: 80px;
+            margin-right: 15px;
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .book-info {
+            flex-grow: 1;
+        }
+
+        .book-title {
+            font-weight: bold;
+        }
+
+        .book-author {
+            color: #666;
+        }
+
+        .status-btn {
+            background-color: #2a9d8f;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .status-btn:hover {
+            background-color: #21867a;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'profile' %}">Profile</a>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- User's Bookshelf -->
+        <div class="bookshelf">
+            <h3>Your TBR List</h3>
+            
+            {% for entry in to_be_read_books %}
+            <div class="book-item">
+                <div class="book-cover">
+                    <img src="{{ entry.book.cover_image.url }}" alt="Book Cover">
+                </div>
+                <div class="book-info">
+                    <p class="book-title">{{ entry.book.title }}</p>
+                    <p class="book-author">by {{ entry.book.author }}</p>
+                </div>
+                <button class="status-btn" onclick="updateStatus('{{ entry.book.id }}')">Currently Reading</button>
+            </div>
+            {% empty %}
+                <p>No books in your "To Be Read" list.</p>
+            {% endfor %}
+            
+        </div>
+
+    </div>
+
+    <script>
+       function updateStatus(bookId) {
+    fetch(`/update_status/${bookId}/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ status: "Currently Reading" }) // This might not be necessary
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Book status updated to 'To Be Read'");
+        } else {
+            alert("Error updating status");
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+    </script>
+</body>
+</html>
